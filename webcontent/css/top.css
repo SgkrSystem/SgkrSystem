@@ -1,0 +1,113 @@
+@charset "utf-8";
+
+/*おすすめのところ～*/
+#rec_list{
+  padding: 10px;
+}
+
+/*トップページのスライドショー
+---------------------------------------------------------------------------*/
+#mainimg {
+	clear: left;
+	width: 100%;
+	height: auto;
+	position: relative;
+	margin-bottom: 30px;
+  margin-top: 50px;
+}
+#mainimg img {
+	border-radius: 10px;	/*角丸のサイズ*/
+}
+#mainimg .slide_file {
+	display: none;
+}
+#slide_image {
+	z-index:2;
+	height: auto;
+	width: 100%;
+	position: relative;
+}
+#slide_image2 {
+	z-index:1;
+	height: auto;
+	width: 100%;
+	position: absolute;
+	left:0px;
+	top:0px;
+}
+
+/*おすすめ商品内の各ブロック
+---------------------------------------------------------------------------*/
+
+/*ボックスの設定*/
+#main section.list {
+	border-radius: 10px;		/*角丸のサイズ*/
+	background: #FFF;	/*背景色（古いブラウザだとここの色のみが出ます）*/
+	background: -webkit-gradient(linear, left top, left bottom, from(#FFF), to(#eaeaea));	/*グラデーション*/
+	background: -webkit-linear-gradient(#FFF, #eaeaea);	/*同上*/
+	background: linear-gradient(#FFF, #eaeaea);			/*同上*/
+	overflow: hidden;
+	margin-bottom: 15px;	/*ボックス同士のスペース*/
+  height: 400px;
+	width: 31%;
+	float: left;
+  margin-top: 5px;
+	margin-left: 1.5%;
+	border: 1px solid #CCC;
+
+}
+#main section.list.type2 {
+	background: none;
+	border: none;
+}
+#main section.list figure {
+	display: block;
+  background-color: #c9c5c6;
+	padding: 10px;	/*ボックス内の余白*/
+  margin: 10px;
+	text-decoration: none;
+	overflow: hidden;
+}
+/*マウスオン時*/
+#main section.list a:hover {
+	background: #fff799;	/*背景色*/
+}
+/*ボックス内の段落タグ設定*/
+#main section.list p {
+	padding: 0px;
+	color: #666;	/*文字色*/
+}
+#main section.list.type2 p {
+	color: #333;	/*文字色*/
+}
+/*ボックス内の写真設定*/
+#main section.list figure img {
+	width: 100%;	/*写真の幅*/
+	height: auto;	/*写真の高さ*/
+}
+/*ボックス内のh4タグ設定*/
+#main section.list h4 {
+	font-size: 100%;
+	color: #333;	/*文字色*/
+}
+#main section.list.type2 h4 {
+	color: #333;	/*文字色*/
+}
+
+#main section.list .des1 {
+  padding: 5px;
+  width: 45%;
+  float: left;
+	color: #333;	/*文字色*/
+  border-right: 1px solid #a7b4bc;	/*メニューの右側の線の幅、線種、色*/
+}
+#main section.list .des2 {
+  padding: 5px;
+  width: 45%;
+  float: right;
+	color: #333;	/*文字色*/
+}
+#main section.list .buybtn{
+  width : 100px;
+  margin: 0 auto;
+}

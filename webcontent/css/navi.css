@@ -1,0 +1,134 @@
+@charset "utf-8";
+
+/*上部のメインメニュー
+---------------------------------------------------------------------------*/
+
+/*メニューブロック全体の設定*/
+nav#menubar ul#all {
+	padding: 0;
+	background: #6dd7ff;	/*背景色（古いブラウザだとここの色のみが出ます）*/
+	background: -webkit-gradient(linear, left top, left bottom, from(#6dd7ff), to(#52bde7));	/*グラデーション*/
+	background: -webkit-linear-gradient(#6dd7ff, #52bde7);	/*同上*/
+	background: linear-gradient(#6dd7ff, #52bde7);			/*同上*/
+	-webkit-box-shadow: 1px 2px 7px rgba(0,0,0,0.2);	/*影の設定。右・下・ぼかし幅・色の設定*/
+	box-shadow: 1px 2px 7px rgba(0,0,0,0.2);			/*同上*/
+	border-radius: 10px;		/*角丸のサイズ*/
+	padding-left: 36px;
+	height: 60px;
+}
+/*メニュー１個ごとの設定*/
+nav#menubar ul li.nonflip {
+	float: left;
+	width: 150px;	/*メニュー幅*/
+	border-right: 1px solid #4eb2d6;	/*メニューの右側の線の幅、線種、色*/
+	text-align: center;
+}
+nav#menubar ul li.nonflip a {
+	color: #FFF;		/*文字色*/
+	text-decoration: none;
+	display: block;
+	line-height: 60px;
+}
+/*最初のメニューの設定*/
+nav#menubar ul li.nonflip:first-child {
+	border-left: 1px solid #4eb2d6;	/*左側に線を入れる*/
+}
+/*マウスオン時の設定*/
+nav#menubar a:hover {
+	background: #fff799;		/*背景色*/
+	color: #333;		/*文字色*/
+}
+
+ul.hide{
+	padding: 0;
+	position:absolute;
+	-webkit-box-shadow: 1px 2px 7px rgba(0,0,0,0.2);	/*影の設定。右・下・ぼかし幅・色の設定*/
+	box-shadow: 1px 2px 7px rgba(0,0,0,0.2);			/*同上*/
+	padding-left: 36px;
+	height: 60px;
+	width: 150px;
+}
+
+nav#menubar ul li.dropmenu {
+	float: left;
+	width: 150px;	/*メニュー幅*/
+	text-align: center;
+	z-index: 10;
+}
+
+nav#menubar ul li.dropmenu ul{
+	width: 150px;	/*メニュー幅*/
+	text-align: center;
+	list-style: none;
+	margin: 0px;
+	padding: 0px;
+}
+
+nav#menubar ul li.dropmenu ul li{
+	background: #6699ff;
+	height: 30px;
+	border-bottom: 1px solid blue;
+}
+
+nav#menubar ul li.dropmenu:hover ul{
+	visibility: visible;
+	transform: rotateX(0);
+	z-index: 10;
+}
+
+nav#menubar ul li.dropmenu a {
+	color: #FFF;		/*文字色*/
+	text-decoration: none;
+	display: block;
+	line-height: 60px;
+}
+
+nav#menubar ul li.dropmenu table {
+	background: #6699ff;	/*背景色（古いブラウザだとここの色のみが出ます）*/
+	-webkit-box-shadow: 1px 2px 7px rgba(0,0,0,0.2);	/*影の設定。右・下・ぼかし幅・色の設定*/
+	box-shadow: 1px 2px 7px rgba(0,0,0,0.2);			/*同上*/
+	height: 60px;
+	margin: 0 auto;
+}
+
+.login{
+	width: 100px;
+	margin: 5px;
+}
+
+
+nav#menubar ul li.search {
+	border-right: 1px solid #4eb2d6;	/*メニューの右側の線の幅、線種、色*/
+	float: left;
+	width: 300px;	/*メニュー幅*/
+	text-align: center;
+	height: 60px;
+}
+
+#searchbox{
+	margin: 1px;
+	border-radius: 10px;		/*角丸のサイズ*/
+	background-color: #a5a5a5;
+	width: 260px;
+	margin: 0 auto;
+	margin-top: 15px;
+	height: 35px;
+}
+
+#searchwd{
+	width: 190px;
+	margin-right: 10px;
+}
+
+#searchbtn{
+	margin-top:5px;
+	width: 20px;
+	height: 20px;
+}
+
+.dropmenu ul{
+  visibility: hidden;
+  transform: rotateX(-90deg);
+  transform-origin: 50% 0;
+  transition: .3s;
+}

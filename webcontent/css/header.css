@@ -1,0 +1,35 @@
+@charset "utf-8";
+
+/*ヘッダー（サイト名ロゴが入ったブロック）
+---------------------------------------------------------------------------*/
+/*ヘッダーブロック*/
+header {
+	width: 100%;	/*ブロックの幅*/
+	height: 200px;	/*ブロックの高さ*/
+	position: relative;
+}
+/*h1の設定*/
+header h1 {
+	font-size: 10px;
+	font-weight: normal;
+	position: absolute;
+	left: 60px;	/*ヘッダーブロックに対して左から60pxの位置に配置*/
+	top: 120px;	/*ヘッダーブロックに対して上から120pxの位置に配置*/
+	z-index: 1;
+}
+header h1 a {
+	text-decoration: none;
+}
+/*ロゴの設定*/
+header #logo {
+	position: absolute;
+	left: 60px;	/*ヘッダーブロックに対して左から60pxの位置に配置*/
+	top: 60px;	/*ヘッダーブロックに対して上から60pxの位置に配置*/
+	z-index: 2;
+}
+/*ヘッダー装飾画像*/
+#header-img {
+	position: absolute;
+	top: -50px;
+	right: 30px;
+}
