@@ -52,7 +52,6 @@ titleタグの次に重要なので念入りに考えてワードを盛り込み
 
 <%for(Product p:products){%>
         <section class="list">
-        <figure><img src="<%=p.getImg_url() %>>" alt=""></figure>
         </section>
 <br/> 
 <section>
@@ -86,9 +85,12 @@ titleタグの次に重要なので念入りに考えてワードを盛り込み
 </tr>
 
 </table>		
-		<form action="CartServlet.jsp" method="post">
+		<form action="CartServlet" method="post">
+			<input type="hidden" name="P_ID" value=<%=p.getP_id() %>>
+			<input type="hidden" name="PRICE" value=<%=p.getU_price()%>>
+			<input type="hidden" name="P_NAME" value=<%=p.getP_name()%>>
+			購入数：<input type="text" name="P_QUA">
 			<input type="submit" value="カートに入れる">
-			<input type="hidden" name="ID" value=<%=p.getP_id() %>>
 		</form>
 </section>
 <%}%>

@@ -10,6 +10,8 @@ import java.util.Date;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.tomcat.dbcp.dbcp.DelegatingPreparedStatement;
+
 import jp.co.sgkr.bean.*;
 
 public class Dao {
@@ -74,7 +76,7 @@ public class Dao {
 		try {
 			Connection con = getConnection();
 			PreparedStatement ps = con
-					.prepareStatement("Select * from Product p left outer join category c on p.category_id = c.category_id left outer join maker m on p.maker_id = m.maker_id where p.product_name='%?%' order by product_id");
+					.prepareStatement("Select * from Product p left outer join category c on p.category_id = c.category_id left outer join maker m on p.maker_id = m.maker_id where p.product_name like {escape '\\'} ? {escape '\\'} order by product_id DESC;");
 			ps.setString(1, searchwd);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -220,7 +222,7 @@ public class Dao {
 	public boolean UpdateM(Maker m) {
 		try (Connection con = getConnection();
 				PreparedStatement ps = con
-						.prepareStatement("Update Maker Set maker_name=? where maker_id=?");) {
+						.prepareStatement("Update Maker Set maker_name=? where maker_id = ?");) {
 			ps.setInt(1, m.getM_id());
 			ps.setString(2, m.getM_name());
 			ps.executeUpdate();
@@ -259,7 +261,7 @@ public class Dao {
 		ArrayList<Category> list = new ArrayList<Category>();
 		try (Connection con = getConnection();
 				PreparedStatement ps = con
-						.prepareStatement("Select * from category order by category_id");
+						.prepareStatement("Select * from category order by category_id desc");
 				ResultSet rs = ps.executeQuery();) {
 			while (rs.next()) {
 				int c_id = rs.getInt("category_id");
@@ -300,7 +302,7 @@ public class Dao {
 	public boolean UpdateC(Category c) {
 		try (Connection con = getConnection();
 				PreparedStatement ps = con
-						.prepareStatement("Update Category Set category_name=? where category_id=?");) {
+						.prepareStatement("Update Category Set category_name='?' where category_id = ?");) {
 			ps.setInt(1, c.getC_id());
 			ps.setString(2, c.getC_name());
 			ps.executeUpdate();
@@ -443,21 +445,32 @@ public class Dao {
 
 	/**
 	 * 
-	 * @param Order_history
-	 *            o
+	 * @param int id,Date o_day,String address, int card_num,int phone_num,int
+	 *        t_amount Order_Historyに合わせると注文idが必要になる 注文idはwebからだとオートインクリメント
 	 * @return boolean
 	 */
-	public boolean InsertO(Order_history o) {
+	public boolean InsertO(ArrayList<BuyProducts> BuyProducts,String customer_id,int t_amount) {
+		ResultSet rs = null;
+		int order_id = -1;
 		try (Connection con = getConnection();
 				PreparedStatement ps = con
-						.prepareStatement("Insert into Customer values(?,?,?,?,?,?)");) {
-			ps.setInt(1, o.getId());
-			ps.setDate(2, (java.sql.Date) o.getO_day());
-			ps.setString(3, o.getAddress());
-			ps.setInt(4, o.getCard_num());
-			ps.setInt(5, o.getPhone_num());
-			ps.setInt(6, o.getT_amount());
+						.prepareStatement("Insert into Order_History(ORDER_ID,ORDER_DAY,TOTAL_AMOUNT,CUSTOMER_ID) SELECT NVL(MAX(ORDER_ID), 0) + 1,SYSDATE,?,? from Order_History");) {
+			ps.setInt(1, t_amount);
+			ps.setString(2, customer_id);
 			ps.executeUpdate();
+			
+			PreparedStatement ps2 = con.prepareStatement("Select max(order_id) from Order_History");
+			rs = ps2.executeQuery();
+			rs.next();
+			order_id = rs.getInt("max(order_id)");
+
+			for(BuyProducts bp:BuyProducts){
+			PreparedStatement ps3 = con.prepareStatement("Insert into U_Order_Detail(U_ORDER_ID,ORDER_ID,PRODUCT_ID,P_QUA) SELECT NVL(MAX(u_ORDER_ID), 0) + 1,?,?,? from u_order_detail");
+			ps3.setInt(1, order_id);
+			ps3.setInt(2, bp.getP_id());
+			ps3.setInt(3, bp.getP_qua());
+			ps3.executeUpdate();
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
@@ -518,7 +531,7 @@ public class Dao {
 		ArrayList<C_customer> list = new ArrayList<C_customer>();
 		try (Connection con = getConnection();
 				PreparedStatement ps = con
-						.prepareStatement("Select * from c_customer order by c_id");
+						.prepareStatement("Select * from c_customer order by c_id;");
 				ResultSet rs = ps.executeQuery();) {
 			while (rs.next()) {
 				int c_id = rs.getInt("c_id");
@@ -572,7 +585,7 @@ public class Dao {
 	public boolean UpdateC_cu(C_customer c) {
 		try (Connection con = getConnection();
 				PreparedStatement ps = con
-						.prepareStatement("Update C_customer Set passwd=?,c_name=?,address=?,phone_number=?,fax_number=?,emial=?,credit_limit=? where c_id=?");) {
+						.prepareStatement("Update C_customer Set passwd=?,c_name=?,address=?,phone_number=?,fax_number=?,emial=?,credit_limit=?, where c_id=?");) {
 			ps.setString(1, c.getPass());
 			ps.setString(2, c.getC_name());
 			ps.setString(3, c.getAddress());
@@ -617,7 +630,7 @@ public class Dao {
 		ArrayList<C_order_history> list = new ArrayList<C_order_history>();
 		try (Connection con = getConnection();
 				PreparedStatement ps = con
-						.prepareStatement("Select * from c_order_history order by c_orderid");
+						.prepareStatement("Select * from c_order_history order by c_orderid;");
 				ResultSet rs = ps.executeQuery();) {
 			while (rs.next()) {
 				int c_orderid = rs.getInt("c_orderid");
@@ -702,23 +715,15 @@ public class Dao {
 	}
 
 	public boolean Check_Login(String ID, String passwd) {
-		ResultSet rs = null;
-		try (Connection con = getConnection();
-				PreparedStatement ps = con
-						.prepareStatement("select passwd from C_customer where c_id = '?'");) {
+		try {
+			Connection con = getConnection();
+			ResultSet rs = null;
+			PreparedStatement ps = con
+					.prepareStatement("select * from S_user where s_name = ?");
 			ps.setString(1, ID);
 			rs = ps.executeQuery();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return false;
-		}
-		try {
 			rs.next();
-		} catch (SQLException e1) {
-			return false;
-		}
-		try {
-			if (rs.getString("passwd") == passwd) {
+			if (rs.getString("s_password").equals(passwd)) {
 				return true;
 			}
 		} catch (SQLException e) {
@@ -728,15 +733,16 @@ public class Dao {
 		return false;
 	}
 
-	public ArrayList<Product> ProductP(String id){
+	public ArrayList<Product> ProductP(String id) {
 		ArrayList<Product> list = new ArrayList<Product>();
-		try{
+		try {
 			Connection con = getConnection();
-			PreparedStatement ps = con.prepareStatement("Select * from Product t1 left outer join Category t2 on t1.CATEGORY_ID = t2.CATEGORY_ID left outer join MAKER t3 on t1.MAKER_ID = t3.MAKER_ID where t1.product_id = ?");
+			PreparedStatement ps = con
+					.prepareStatement("Select * from Product t1 left outer join Category t2 on t1.CATEGORY_ID = t2.CATEGORY_ID left outer join MAKER t3 on t1.MAKER_ID = t3.MAKER_ID where t1.product_id = ?");
 			ps.setString(1, id);
 			ResultSet rs = ps.executeQuery();
-			while(rs.next()){
-				
+			while (rs.next()) {
+
 				int p_id = rs.getInt("product_id");
 				String p_name = rs.getString("product_name");
 				int c_id = rs.getInt("category_id");
@@ -749,11 +755,11 @@ public class Dao {
 				String m_name = rs.getString("maker_name");
 				String img_url = rs.getString("img_url");
 				String p_detail = rs.getString("p_detail");
-				ps.setString(1,id);
-				list.add(new Product(p_id,p_name,c_id, stock, sell_q, buy_q, m_id, u_price, c_name, m_name, img_url, p_detail));
+				ps.setString(1, id);
+				list.add(new Product(p_id, p_name, c_id, stock, sell_q, buy_q,
+						m_id, u_price, c_name, m_name, img_url, p_detail));
 			}
-		}
-		catch(SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return list;
@@ -770,13 +776,12 @@ public class Dao {
 		try {
 			con = getConnection();
 		} catch (SQLException e) {
-			// TODO 閾ｪ蜍慕函謌舌＆繧後◆ catch 繝悶Ο繝?繧ｯ
 			e.printStackTrace();
 			msg = "データベース接続に失敗しました";
 			b = false;
 		}
 		try {
-			ps = con.prepareStatement("Select count(*) from S_USER where S_USER_ID = '?' and S_PASSWORD = '?' group by S_USER_ID;");
+			ps = con.prepareStatement("Select count(*) from S_USER where S_USER_ID = ? and S_PASSWORD = ? group by S_USER_ID;");
 			ps.setString(1, ID);
 			ps.setString(2, passwd);
 			rs = ps.executeQuery();
@@ -788,7 +793,6 @@ public class Dao {
 				b = false;
 			}
 		} catch (SQLException e) {
-			// TODO 閾ｪ蜍慕函謌舌＆繧後◆ catch 繝悶Ο繝?繧ｯ
 			e.printStackTrace();
 			msg = "データベース接続に失敗しました";
 			b = false;

@@ -42,7 +42,7 @@ public class LoginServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 		boolean b = dao.Check_Login(ID, passwd);
 		String dispPage = "";
-		if(b){
+		if(!b){
 			msg +="\nƒƒOƒCƒ“‚É¸”s‚µ‚Ü‚µ‚½B";
 			dispPage = "Result.jsp";
 		}else{

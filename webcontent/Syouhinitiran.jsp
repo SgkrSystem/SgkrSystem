@@ -12,7 +12,7 @@
 <meta name="copyright" content="Template Party">
 <meta name="description" content="ここにサイト説明を入れます">
 <meta name="keywords" content="キーワード１,キーワード２,キーワード３,キーワード４,キーワード５">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/styleshohin.css">
 <link href="css/lightbox.css" rel="stylesheet" type="text/css">
 <!--[if lt IE 9]>
 <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -63,8 +63,8 @@ titleタグの次に重要なので念入りに考えてワードを盛り込み
 		カテゴリ名：<%=p.getC_name() %><br/>
 		メーカー名：<%=p.getM_name() %><br/>
         </p>
-        </section>
         <input type="submit" value="商品詳細">
+        </section>
         </form>
 <%}%>   
 	<h3 class="mb15">1ページ目</h3>

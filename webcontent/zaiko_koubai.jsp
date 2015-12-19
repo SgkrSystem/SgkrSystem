@@ -13,25 +13,29 @@
 <form id="searchbox" action="SyouhinServlet" method="post">
     <input id="searchwd" type="text" name="searchwd"><input id="searchbtn" type="image" name="search" alt="検索" src="images/searchbtn.png">
   </form>
-  <table style="border:solid 1px">
+  <table style="border-collapse: collapse">
   <tr>
-  <th>商品id</th>
-  <th>商品名</th>
-  <th>価格</th>
-  <th>カテゴリ名</th>
-  <th>メーカー名</th>
-  <th>在庫管理</th>
-  <th>購買</th>
+  <th style="border:solid 1px">商品id</th>
+  <th style="border:solid 1px">商品名</th>
+  <th style="border:solid 1px">価格</th>
+  <th style="border:solid 1px">カテゴリ名</th>
+  <th style="border:solid 1px">メーカー名</th>
+  <th style="border:solid 1px">在庫数量</th>
+  <th style="border:solid 1px">売掛数量</th>
+  <th style="border:solid 1px">買掛数量</th>
+  <th style="border:solid 1px">在庫管理</th>
   </tr>
 <%for(Product p:products){%>
 	<tr>
-		<td><%=p.getP_id() %></td>
-        <td><%=p.getP_name() %></td>
-        <td><%=p.getU_price() %>円</td>
-		<td><%=p.getC_name() %><br/></td>
-		<td><%=p.getM_name() %><br/></td>
-		<td><form action="ZaikoServlet"><input type="hidden" value="<%=p.getP_id() %>" name="P_id"></form></td>
-		<td><form action="KoubaiServlet"><input type="hidden" value="<%=p.getP_id() %>" name="P_id"></form></td>
+		<td style="border:solid 1px"><%=p.getP_id() %></td>
+        <td style="border:solid 1px"><%=p.getP_name() %></td>
+        <td style="border:solid 1px"><%=p.getU_price() %>円</td>
+		<td style="border:solid 1px"><%=p.getC_name() %><br/></td>
+		<td style="border:solid 1px"><%=p.getM_name() %><br/></td>
+		<td style="border:solid 1px"><%=p.getStock() %><br/></td>
+		<td style="border:solid 1px"><%=p.getBuy_q() %><br/></td>
+		<td style="border:solid 1px"><%=p.getSell_q() %><br/></td>
+		<td style="border:solid 1px"><form action="ZaikoServlet" method="post"><input type="hidden" value="<%=p.getP_id() %>" name="P_id"><input type="submit" value="商品詳細確認・変更"></form></td>
      </tr>
 <%}%>
 </table>

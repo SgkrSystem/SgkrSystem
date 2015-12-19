@@ -32,26 +32,54 @@ public class CartServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		String dispPage = "";
 		String msg = "";
+
+		int p_id = 0;
+		int p_quantity = 0;
+		String p_name = "";
+		int u_price = 0;
+
 		HttpSession session = request.getSession(true);
 		if (session.getAttribute("ID") == null) {
 			dispPage = "Result.jsp";
 			msg = "カート機能を使うにはログインしてください";
 		} else {
 			ArrayList<Cart> cart = null;
-			if (request.getSession(true) != null) {
+			if (session.getAttribute("Cart") != null) {
 				cart = (ArrayList<Cart>) session.getAttribute("Cart");
+			} else {
+				cart = new ArrayList<Cart>();
 			}
 			request.setCharacterEncoding("UTF-8");
-			int p_id = Integer.parseInt(request.getParameter("ID"));
-			int p_quantity = Integer.parseInt(request.getParameter("P_QUA"));
-			String p_name = request.getParameter("P_NAME");
-			int u_price = Integer.parseInt(request.getParameter("PRICE"));
-
-			cart.add(new Cart(p_id, p_quantity, p_name, u_price));
-			session.setMaxInactiveInterval(18000); // セッション５時間保持
-			session.setAttribute("Cart", cart);
-
-			dispPage = "cart.jsp";
+			ArrayList<Cart> new_cart = new ArrayList<Cart>();
+			boolean flg = false;
+			try {
+				for (Cart c : cart) {
+					if (c.getP_id() == Integer.parseInt(request
+							.getParameter("P_ID"))) {
+						new_cart.add(new Cart(c.getP_id(), c.getP_quantity()
+								+ Integer.parseInt(request
+										.getParameter("P_QUA")), c.getP_name(),
+								c.getU_price()));
+						flg = true;
+					} else {
+						new_cart.add(c);
+					}
+				}
+				if (flg == false) {
+					p_id = Integer.parseInt(request.getParameter("P_ID"));
+					p_quantity = Integer.parseInt(request.getParameter("P_QUA"));
+					p_name = request.getParameter("P_NAME");
+					u_price = Integer.parseInt(request.getParameter("PRICE"));
+					new_cart.add(new Cart(p_id, p_quantity, p_name, u_price));
+				}
+				session.setMaxInactiveInterval(18000); // セッション５時間保持
+				session.setAttribute("Cart", new_cart);
+				dispPage = "cart.jsp";
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+				dispPage = "Result.jsp";
+				msg = "購入数に数字以外を入力しないでください";
+			}
 		}
 		RequestDispatcher disp = request.getRequestDispatcher(dispPage);
 		request.setAttribute("msg", msg);

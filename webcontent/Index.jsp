@@ -49,9 +49,8 @@
   </ul>
 </li>
 <li class="nonflip"><a href="IndividualRegist.html">個人向け新規登録</a></li>
-<li class="nonflip"><a href="CorporationRejist.html">法人向け新規登録</a></li>
 <li class="search">
-  <form id="searchbox" action="" method="get">
+  <form id="searchbox" action="SyouhinServlet" method="get">
     <input id="searchwd" type="text" name="searchwd"><input id="searchbtn" type="image" name="search" alt="検索" src="images/searchbtn.png">
   </form>
 </li>

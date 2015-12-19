@@ -49,11 +49,10 @@ public class SyouhinServlet extends HttpServlet {
 		products = dao.SelectP();
 		categories = dao.SelectC();
 		makers = dao.SelectM();
-		String dispPage = "zaiko_koubai.jsp";
-		String []s = request.getHeader("referer").split("[/]");
-		System.out.println(s[s.length-1]);
-		if(s[s.length-1].equals("Index.jsp")){
-			dispPage = "Syouhinitiran.jsp";
+		String dispPage = "Syouhinitiran.jsp";
+		String[] s = request.getHeader("referer").split("[/]");
+		if(s[s.length-1].equals("sgkradmin.jsp")){
+			dispPage = "zaiko_koubai.jsp";
 		}
 		RequestDispatcher disp = request.getRequestDispatcher(dispPage);
 		request.setAttribute("products", products);
@@ -97,5 +96,4 @@ public class SyouhinServlet extends HttpServlet {
 		request.setAttribute("products", products);
 		disp.forward(request, response);
 	}
-
 }

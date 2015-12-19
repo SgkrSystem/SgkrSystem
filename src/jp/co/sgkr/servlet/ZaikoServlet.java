@@ -46,6 +46,7 @@ public class ZaikoServlet extends HttpServlet {
 		products = dao.ProductP(P_id);
 		categories = dao.SelectC();
 		makers = dao.SelectM();
+		
 		String dispPage = "zaiko.jsp";
 		RequestDispatcher disp = request.getRequestDispatcher(dispPage);
 		request.setAttribute("products", products);
