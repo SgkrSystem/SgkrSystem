@@ -25,10 +25,9 @@
 <div id="container">
 
 <header>
-<p id="logo"><a href="index.html"><img src="images/logo.png" width="304" height="48" alt="Photo Gallery"></a></p>
-<h1><a href="index.html">h1テキスト入力場所です。<br>
-titleタグの次に重要なので念入りに考えてワードを盛り込みましょう。</a></h1>
-<aside id="header-img"><img src="images/header_img.png" alt=""></aside>
+<p id="logo"><a href="index.html"><img src="images/logo5.png" width="304" height="48" alt="Photo Gallery"></a></p>
+<aside id="header-img"><img src="images/header_img1.png" alt=""></aside>
+<h1><br><a href="index.html">すぐ★くる！<br>個人法人両方対応文房具販売サイト</a></h1>
 </header>
 
 <nav id="menubar">
